@@ -1,0 +1,11 @@
+{
+  "name": "crawler_url",
+  "version": "1.0.0",
+  "description": "Crawls all the URLs of a webiste",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ankit Singh",
+  "license": "ISC"
+}
