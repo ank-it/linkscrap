@@ -15,24 +15,11 @@ var urlsToVisit = [];
 var url = new URL(START_URL);
 var baseUrl = url.protocol + "//" + url.hostname;
 
-console.log("Starting the Crawler  1 ..2...3 " + START_URL);
-urlsToVisit.push(START_URL);
-scrap();
+// Method to download the Url and 
+// push their contents to the 
+// array of Urls to be visited.
 
-function scrap() {
-  if( totalUrlsVisited >= MAX_PAGES_TO_VISIT || urlsToVisit.length == 0) {
-    console.log("Scrapping completed !");
-    return;
-  }
-  var nextPage = urlsToVisit.pop();
-  if (nextPage in downloadedUrls) {
-    scrap();
-  } else {
-    setTimeout( visitPage(nextPage, scrap), TIMEOUT);
-  }
-}
-
-function visitPage(url, callback) {
+function downloadUrl(url, callback) {
   downloadedUrls[url] = true;
    totalUrlsVisited++;
 
@@ -61,3 +48,22 @@ function visitPage(url, callback) {
 		});
   });
 }
+
+// Method to start and execute the scrapping
+function scrap() {
+  if( totalUrlsVisited >= MAX_PAGES_TO_VISIT || urlsToVisit.length == 0) {
+    console.log("Scrapping completed !");
+    return;
+  }
+  var nextUrl = urlsToVisit.pop();
+  if (nextUrl in downloadedUrls) {
+    scrap();
+  } else {
+    setTimeout( downloadUrl(nextUrl, scrap), TIMEOUT);
+  }
+}
+
+console.log("Starting the Crawler  1 ..2...3 " + START_URL);
+urlsToVisit.push(START_URL);
+scrap();
+
