@@ -1,13 +1,13 @@
 var fs = require('fs');
 var URL = require('url-parse');
-
+var async = require('async');
 var request = require('request');
 var cheerio = require('cheerio');
 
 var START_URL = "https://medium.com";
 var MAX_PAGES_TO_VISIT = 100000;
 var TIMEOUT = 5000;
-
+var THROTTLE_REQUEST = 5;
 
 var downloadedUrls = {};
 var  totalUrlsVisited = 0;
@@ -53,17 +53,21 @@ function downloadUrl(url, callback) {
 function scrap() {
   if( totalUrlsVisited >= MAX_PAGES_TO_VISIT || urlsToVisit.length == 0) {
     console.log("Scrapping completed !");
-    return;
+    clearInterval(INTERVAL);
+    process.exit();
   }
   var nextUrl = urlsToVisit.pop();
   if (nextUrl in downloadedUrls) {
     scrap();
   } else {
-    setTimeout( downloadUrl(nextUrl, scrap), TIMEOUT);
+  	// var loaders = urlsToVisit.map();
+    downloadUrl(nextUrl, scrap);
   }
 }
 
 console.log("Starting the Crawler  1 ..2...3 " + START_URL);
 urlsToVisit.push(START_URL);
-scrap();
+var INTERVAL = setInterval(scrap, 5000);
 
+// For limiting the queries to 5 we can use async with parallel limit on URLS and 
+// callback functions
