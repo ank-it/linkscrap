@@ -34,11 +34,14 @@ function downloadUrl(url, callback) {
      $('a').each(function (i, el) {
      	var urlString = $(el).attr('href');
      	var str = /^https?:\/\//i;
-     	// Match only medium URLs to be scrapped next time.
-			if (urlString.indexOf('https://medium.com') === 0)
-			{
-			    urlsToVisit.push(urlString);
-			}
+      if (urlString != undefined) {
+        // Match only medium URLs to be scrapped next time.
+        if (urlString.indexOf('https://medium.com') === 0)
+        {
+            urlsToVisit.push(urlString);
+        }
+      }
+     	
 	  });
    	fs.appendFile( 'links.csv', '\n'+url, function (err) {
    		if (err) {
